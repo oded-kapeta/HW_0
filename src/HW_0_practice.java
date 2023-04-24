@@ -18,6 +18,7 @@ public class HW_0_practice {
         int[][] battleships_Length = new int[battleships_Array.length][2];
         splitBattleships(battleships_Length,battleships_Array);
         print_all_Ships(battleships_Length);
+        //HHJJHJ
 
     }
 
