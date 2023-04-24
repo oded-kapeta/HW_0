@@ -16,8 +16,8 @@ public class Main {
         boardSize = getBoardSize(boardSize);
         int[] sizeOfBoard = new int[2];
         splitBoard(sizeOfBoard,boardSize);
-        int row = sizeOfBoard[0];
-        int col = sizeOfBoard[1];
+        int row = sizeOfBoard[0] + 1;
+        int col = sizeOfBoard[1] + 1;
 
 
 
@@ -132,10 +132,10 @@ public class Main {
     public static void createBoard(String[][] arr){
         arr[0][0] = " ";
         for(int  i = 1 ; i < arr[0].length ; i ++){
-            arr[0][i]  = Integer.toString(i);
+            arr[0][i]  = Integer.toString(i-1);
         }
         for (int j = 1 ; j < arr.length; j++){
-            arr[j][0] = Integer.toString(j);
+            arr[j][0] = Integer.toString(j-1);
         }
         for (int k = 1; k < arr.length; k++){
             for (int z =1 ; z < arr[0].length;z++){
