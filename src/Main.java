@@ -24,10 +24,10 @@ public class Main {
         //get the battleships size and create 2d array that save them:
         String battleships = new String();
         battleships  = getBattleships(battleships);
-        String[] battleships_Array = battleships.split(" ");
-        int[][] battleships_Length = new int[battleships_Array.length][2];
-        splitBattleships(battleships_Length,battleships_Array);
-        print2dIntArray(battleships_Length);
+        String[] battleships_TempArray = battleships.split(" ");
+        int[][] battleships_2dArray = new int[battleships_TempArray.length][2];
+        splitBattleships(battleships_2dArray, battleships_TempArray);
+        print2dIntArray(battleships_2dArray);
 
         //creating board:
         String [][] board = new String[row][col];
