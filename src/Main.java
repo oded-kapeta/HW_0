@@ -31,9 +31,11 @@ public class Main {
         int maxDigitNumber = getLength(sizeOfBoard[0]);
         int row = sizeOfBoard[0] + 1;
         int col = sizeOfBoard[1] + maxDigitNumber;
-        String [][] board = new String[row][col];
-        createBoard(board , maxDigitNumber);
-        print2dStringArray(board);
+        String [][] userboard = new String[row][col];
+        createBoard(userboard, maxDigitNumber);
+        System.out.println("Your current game board:");
+        print2dStringArray(userboard,maxDigitNumber);
+
     }
 
     /**
@@ -90,6 +92,7 @@ public class Main {
      * @return
      */
     public static int getLength(int x){
+        if(x==0)    return 1;
         int counter = 0;
         while(x != 0){
             x /= 10;
@@ -116,10 +119,13 @@ public class Main {
      * prints string array:
      * @param arr
      */
-    public static void print2dStringArray(String arr[][]){
+    public static void print2dStringArray(String arr[][],int maxDigits){
         for (int i = 0 ; i < arr.length;i++){
             System.out.println();
-            for (int j = 0 ;j < arr[0].length;j++){
+            for(int k = 0; k < maxDigits - 1 ; k++ ){
+                System.out.print(arr[i][k]);
+            }
+            for (int j = maxDigits - 1 ;j < arr[0].length;j++){
                 System.out.print(arr[i][j] + " ");
             }
         }
@@ -140,7 +146,7 @@ public class Main {
         for (int i = 0; i < maxDigit; i++)     arr[0][i] = " ";
         for (int j = maxDigit; j < arr[0].length ; j ++)   arr[0][j] = Integer.toString(j - maxDigit);
         for(int k = 1; k < arr.length;k++) {    /** fill the rows */
-            int temp_DigitsAmount = getLength(k);
+            int temp_DigitsAmount = getLength(k-1);
             int z = maxDigit - 1;
             int tempNumber = k-1;
             while (temp_DigitsAmount != 0) {
