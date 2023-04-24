@@ -1,24 +1,38 @@
+package PACKAGE_NAME;
+
+import com.sun.jdi.Value;
+
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
-public class HW_0_practice {
+public class HW_0_practice{
     public static Scanner scanner;
+    public static Random rnd;
     public static void battleshipGame() {
         // TODO: Add your code here (and add more methods).
+        // get the board size, split per x and save them as row,col:
         String boardSize = new String();
         boardSize = getBoardSize(boardSize);
         int[] sizeOfBoard = new int[2];
         splitBoard(sizeOfBoard,boardSize);
-        int row = getLength(sizeOfBoard[0]);
-        int col = getLength(sizeOfBoard[1]);
+        int row = sizeOfBoard[0];
+        int col = sizeOfBoard[1];
+
+
+
+        //get the battleships size and create 2d array that save them:
         String battleships = new String();
         battleships  = getBattleships(battleships);
         String[] battleships_Array = battleships.split(" ");
         int[][] battleships_Length = new int[battleships_Array.length][2];
         splitBattleships(battleships_Length,battleships_Array);
-        print_all_Ships(battleships_Length);
+        print2dIntArray(battleships_Length);
 
+        //creating board:
+        String [][] board = new String[row][col];
+        createBoard(board);
+        print2dStringArray(board);
 
     }
 
@@ -72,19 +86,6 @@ public class HW_0_practice {
     }
 
     /**
-     * prints the amount and size of each ship
-     * @param arr
-     */
-    public static void print_all_Ships(int arr[][]){
-        for (int i = 0 ; i < arr.length;i++){
-            System.out.println();
-            for (int j = 0 ;j < arr[0].length;j++){
-                System.out.print(arr[i][j] + " ");
-            }
-        }
-    }
-
-    /**
      * this function return the amount of digits in numbet
      * @param x
      * @return
@@ -96,6 +97,54 @@ public class HW_0_practice {
             counter++;
         }
         return counter;
+    }
+
+    /**
+     * prints int array
+     * @param arr
+     */
+    public static void print2dIntArray(int arr[][]){
+        for (int i = 0 ; i < arr.length;i++){
+            System.out.println();
+            for (int j = 0 ;j < arr[0].length;j++){
+                System.out.print(arr[i][j] + " ");
+            }
+        }
+        System.out.println();
+    }
+
+    /**
+     * prints string array:
+     * @param arr
+     */
+    public static void print2dStringArray(String arr[][]){
+        for (int i = 0 ; i < arr.length;i++){
+            System.out.println();
+            for (int j = 0 ;j < arr[0].length;j++){
+                System.out.print(arr[i][j] + " ");
+            }
+        }
+        System.out.println();
+    }
+
+    /**
+     * create the board:
+     * @param arr
+     */
+    public static void createBoard(String[][] arr){
+        arr[0][0] = " ";
+        for(int  i = 1 ; i < arr[0].length ; i ++){
+            arr[0][i]  = Integer.toString(i);
+        }
+        for (int j = 1 ; j < arr.length; j++){
+            arr[j][0] = Integer.toString(j);
+        }
+        for (int k = 1; k < arr.length; k++){
+            for (int z =1 ; z < arr[0].length;z++){
+                arr[k][z] = Character.toString('-');
+            }
+        }
+
     }
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
