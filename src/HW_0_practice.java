@@ -10,6 +10,8 @@ public class HW_0_practice {
         boardSize = getBoardSize(boardSize);
         int[] sizeOfBoard = new int[2];
         splitBoard(sizeOfBoard,boardSize);
+        int row = getLength(sizeOfBoard[0]);
+        int col = getLength(sizeOfBoard[1]);
         String battleships = new String();
         battleships  = getBattleships(battleships);
         String[] battleships_Array = battleships.split(" ");
@@ -19,11 +21,22 @@ public class HW_0_practice {
 
     }
 
+    /**
+     * this function get input from the user of the board
+     * @param boardSize
+     * @return
+     */
     public static String getBoardSize(String boardSize) {
         System.out.println("Enter the board size");
         boardSize = scanner.nextLine();
         return  boardSize;
     }
+
+    /**
+     * this function split the input of the board per X
+     * @param arr
+     * @param boardSize
+     */
     public static void splitBoard(int[]arr, String boardSize){
         String[] temp = boardSize.split("X");
         arr[0] = Integer.parseInt(temp[0]);
@@ -68,6 +81,20 @@ public class HW_0_practice {
                 System.out.print(arr[i][j] + " ");
             }
         }
+    }
+
+    /**
+     * this function return the amount of digits in numbet
+     * @param x
+     * @return
+     */
+    public static int getLength(int x){
+        int counter = 0;
+        while(x != 0){
+            x /= 10;
+            counter++;
+        }
+        return counter;
     }
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
