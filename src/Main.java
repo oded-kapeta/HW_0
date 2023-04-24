@@ -16,8 +16,6 @@ public class Main {
         boardSize = getBoardSize(boardSize);
         int[] sizeOfBoard = new int[2];
         splitBoard(sizeOfBoard,boardSize);
-        int row = sizeOfBoard[0] + 1;
-        int col = sizeOfBoard[1] + 1;
 
 
 
@@ -27,11 +25,14 @@ public class Main {
         String[] battleships_TempArray = battleships.split(" ");
         int[][] battleships_2dArray = new int[battleships_TempArray.length][2];
         splitBattleships(battleships_2dArray, battleships_TempArray);
-        print2dIntArray(battleships_2dArray);
+        //print2dIntArray(battleships_2dArray);
 
         //creating board:
+        int maxDigitNumber = getLength(sizeOfBoard[0]);
+        int row = sizeOfBoard[0] + 1;
+        int col = sizeOfBoard[1] + maxDigitNumber;
         String [][] board = new String[row][col];
-        createBoard(board);
+        createBoard(board , maxDigitNumber);
         print2dStringArray(board);
     }
 
@@ -127,22 +128,38 @@ public class Main {
 
     /**
      * create the board:
+     * first we fill the empty places in the board with " " so that the columns will be straight with the numbers
+     * after that we fill te columns with numbers
+     * then we fill the rows numbers every time the kast digit until we didnt have any digits to fill
+     * then we check with 'if' statement to check if we still have any 'null' places in our column
+     * and in the end we fill all the "real game board" with '- '
      * @param arr
+     * @param maxDigit
      */
-    public static void createBoard(String[][] arr){
-        arr[0][0] = " ";
-        for(int  i = 1 ; i < arr[0].length ; i ++){
-            arr[0][i]  = Integer.toString(i-1);
-        }
-        for (int j = 1 ; j < arr.length; j++){
-            arr[j][0] = Integer.toString(j-1);
-        }
-        for (int k = 1; k < arr.length; k++){
-            for (int z =1 ; z < arr[0].length;z++){
-                arr[k][z] = Character.toString('-');
+    public static void createBoard(String[][] arr , int maxDigit){
+        for (int i = 0; i < maxDigit; i++)     arr[0][i] = " ";
+        for (int j = maxDigit; j < arr[0].length ; j ++)   arr[0][j] = Integer.toString(j - maxDigit);
+        for(int k = 1; k < arr.length;k++) {    /** fill the rows */
+            int temp_DigitsAmount = getLength(k);
+            int z = maxDigit - 1;
+            int tempNumber = k-1;
+            while (temp_DigitsAmount != 0) {
+                arr[k][z] = Integer.toString(tempNumber % 10);
+                tempNumber = (tempNumber - (tempNumber % 10)) / 10;
+                if (z > 0) z--;
+                temp_DigitsAmount--;
+            }
+            if (getLength(k-1) != maxDigit) {
+                for (int i = z; i >= 0; i--) {
+                    arr[k][i] = " ";
+                }
             }
         }
-
+        for(int k = 1 ; k < arr.length; k++){   /** fill the "real" board with '-' */
+            for (int i = maxDigit; i < arr[0].length; i++){
+                arr[k][i] = Character.toString('-');
+            }
+        }
     }
 
 
