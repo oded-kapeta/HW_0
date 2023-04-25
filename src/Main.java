@@ -168,6 +168,77 @@ public class Main {
         }
     }
 
+    /**
+     * this function receives the board, battleship placement and orientation
+     * and if the placement is legal it replaces the relevant tiles with "#"
+     * @param userBoard
+     * @param battleShipSize
+     * @param orientation
+     * @param xPlacement
+     * @param yPlacement
+     */
+    public static void placeBattleShip(String [][]userBoard, int battleShipSize,
+                                       int orientation, int xPlacement, int yPlacement)
+    {
+        if (legalPlacement(userBoard,battleShipSize,orientation,xPlacement,yPlacement))
+        {
+            if(orientation==0)
+            {
+                for(int i=0;i<battleShipSize;i++)
+                {
+                    userBoard[xPlacement][yPlacement+i]= "#";
+                }
+            }
+            if(orientation==1)
+            {
+                for(int j=0;j<battleShipSize;j++)
+                {
+                    userBoard[xPlacement+j][yPlacement]= "#";
+                }
+            }
+        }
+    }
+
+    /**
+     * this function receives the wanted placement (x,y,orientation) and size of battleship
+     * and checks if the placement is legal (if the battleship is only surrounded by water)
+     * @param userBoard
+     * @param battleShipSize
+     * @param orientation
+     * @param xPlacement
+     * @param yPlacement
+     * @return the function returns true if the placement is legal and false otherwise.
+     */
+    public static boolean legalPlacement(String [][]userBoard, int battleShipSize,
+                                         int orientation, int xPlacement, int yPlacement)
+    {
+        if(orientation==0)
+        {
+            for(int i=-1;i<2;i++)
+            {
+                for(int j=-1;j<=battleShipSize+1;j++)
+                {
+                    if(userBoard[xPlacement+i][yPlacement+j]!= "-") /** checking around the battleship*/
+                    {return false;}
+                }
+            }
+            return true;
+        }
+        if(orientation==1)
+        {
+            for(int k=-1;k<=battleShipSize+1;k++)
+            {
+                for(int l=-1;l<2;l++)
+                {
+                    if(userBoard[xPlacement+k][yPlacement+l]!= "-")/** checking around the battleship*/
+                    {return false;}
+                }
+            }
+            return true;
+        }
+        return true;
+    }
+
 
 
 

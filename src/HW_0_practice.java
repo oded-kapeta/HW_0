@@ -216,7 +216,7 @@ public class HW_0_practice{
             {
                 for(int j=-1;j<=battleShipSize+1;j++)
                 {
-                    if(userBoard[xPlacement+i][yPlacement+j]!= "-")
+                    if(userBoard[xPlacement+i][yPlacement+j]!= "-") /** checking around the battleship*/
                     {return false;}
                 }
             }
@@ -228,7 +228,7 @@ public class HW_0_practice{
             {
                 for(int l=-1;l<2;l++)
                 {
-                    if(userBoard[xPlacement+k][yPlacement+l]!= "-")
+                    if(userBoard[xPlacement+k][yPlacement+l]!= "-")/** checking around the battleship*/
                     {return false;}
                 }
             }
