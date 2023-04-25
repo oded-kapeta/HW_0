@@ -28,7 +28,7 @@ public class Main {
         //print2dIntArray(battleships_2dArray);
 
         //creating board:
-        int maxDigitNumber = getLength(sizeOfBoard[0]);
+        int maxDigitNumber = getLength(sizeOfBoard[0] - 1);
         int row = sizeOfBoard[0] + 1;
         int col = sizeOfBoard[1] + maxDigitNumber;
         String [][] userboard = new String[row][col];
