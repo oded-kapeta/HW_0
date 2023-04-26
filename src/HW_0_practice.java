@@ -172,26 +172,26 @@ public class HW_0_practice{
      * @param userBoard
      * @param battleShipSize
      * @param orientation
-     * @param xPlacement
-     * @param yPlacement
+     * @param pointX
+     * @param pointY
      */
     public static void placeBattleShip(String [][]userBoard, int battleShipSize,
-                                       int orientation, int xPlacement, int yPlacement)
+                                       int orientation, int pointX, int pointY)
     {
-        if (legalPlacement(userBoard,battleShipSize,orientation,xPlacement,yPlacement))
+        if (legalPlacement(userBoard,battleShipSize,orientation, pointX, pointY,sizeOfBoard))
         {
-            if(orientation==0)
+            if(orientation==1)
             {
                 for(int i=0;i<battleShipSize;i++)
                 {
-                    userBoard[xPlacement][yPlacement+i]= "#";
+                    userBoard[pointX][pointY +i]= "#";
                 }
             }
-            if(orientation==1)
+            if(orientation==0)
             {
                 for(int j=0;j<battleShipSize;j++)
                 {
-                    userBoard[xPlacement+j][yPlacement]= "#";
+                    userBoard[pointX +j][pointY]= "#";
                 }
             }
         }
@@ -203,36 +203,50 @@ public class HW_0_practice{
      * @param userBoard
      * @param battleShipSize
      * @param orientation
-     * @param xPlacement
-     * @param yPlacement
+     * @param pointX
+     * @param pointY
      * @return the function returns true if the placement is legal and false otherwise.
      */
     public static boolean legalPlacement(String [][]userBoard, int battleShipSize,
-                                         int orientation, int xPlacement, int yPlacement)
+                                         int orientation, int pointX, int pointY,int []arr)
     {
-        if(orientation==0)
+        if(orientation<0 || orientation>1)
+        {
+            System.out.println("illegal orientation, try again!");
+            return false;
+        }
+        if(pointX<0||pointX> arr[0]||pointY<0||pointY> arr[1])
+        {
+            System.out.println("illegal tile, try again!");
+            return false;
+        }
+        if(orientation==1)
         {
             for(int i=-1;i<2;i++)
             {
                 for(int j=-1;j<=battleShipSize+1;j++)
                 {
-                    if(userBoard[xPlacement+i][yPlacement+j]!= "-") /** checking around the battleship*/
+                    if(userBoard[pointX +i][pointY +j]!= "-") /** checking around the battleship*/
                     {return false;}
                 }
             }
-            return true;
         }
-        if(orientation==1)
+        if(orientation==0)
         {
             for(int k=-1;k<=battleShipSize+1;k++)
             {
                 for(int l=-1;l<2;l++)
                 {
-                    if(userBoard[xPlacement+k][yPlacement+l]!= "-")/** checking around the battleship*/
-                    {return false;}
+                    if(userBoard[pointX +k][pointY +l]!= "-")/** checking around the battleship*/
+                    {
+                        System.out.println("BattleShip overlaps another battleship,try again!");
+                        return false;
+                    }
+                    if((pointX+k) > arr[0]|| (pointY+l)> arr[1])
+                    {System.out.println("BattleShip exceeds the boundaries of the board, try again!");
+                    return false;}
                 }
             }
-            return true;
         }
         return true;
     }
