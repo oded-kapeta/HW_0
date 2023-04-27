@@ -15,6 +15,7 @@ public class HW_0_practice{
 
 
 
+
         //get the battleships size and create 2d array that save them:
         String battleships = new String();
         battleships  = getBattleships(battleships);
@@ -29,8 +30,10 @@ public class HW_0_practice{
         int col = sizeOfBoard[1] + maxDigitNumber;
         String [][] userboard = new String[row][col];
         createBoard(userboard, maxDigitNumber);
-        System.out.println("Your current game board:");
-        print2dStringArray(userboard,maxDigitNumber);
+        print2dBoard(userboard,maxDigitNumber);
+
+        //inserting battleships:
+        insertBattleships(userboard,battleships_2dArray,maxDigitNumber);
 
     }
 
@@ -89,7 +92,7 @@ public class HW_0_practice{
      * @return
      */
     public static int getLength(int x){
-        if( x == 0 )    return 1;
+        if(x == 0)   return 1;
         int counter = 0;
         while(x != 0){
             x /= 10;
@@ -116,7 +119,8 @@ public class HW_0_practice{
      * prints string array:
      * @param arr
      */
-    public static void print2dStringArray(String arr[][],int maxDigits){
+    public static void print2dBoard(String arr[][], int maxDigits){
+        System.out.println("Your current game board:");
         for (int i = 0 ; i < arr.length;i++){
             System.out.println();
             for(int k = 0; k < maxDigits - 1 ; k++ ){
@@ -128,7 +132,6 @@ public class HW_0_practice{
         }
         System.out.println();
     }
-
 
     /**
      * create the board:
@@ -166,6 +169,271 @@ public class HW_0_practice{
         }
     }
 
+    public static void insertBattleships(String[][] board , int[][] battleshipsArray , int maxDigitNum){
+        String inputLocation = new String();
+        int row = board.length;
+        int col = board[0].length;
+        for (int i = 0; i < battleshipsArray.length; i++){
+            for (int j = 0; j < battleshipsArray[i][0]; j++){
+                System.out.println("Enter location and orientation for battleship of size " + battleshipsArray[i][1] );
+                inputLocation = scanner.nextLine();
+                String [] splitedInput = inputLocation.split(", ");
+                int pointY =Integer.parseInt(splitedInput[0]) + 1;
+                int pointX =Integer.parseInt(splitedInput[1]) + maxDigitNum;
+                int orientation = Integer.parseInt(splitedInput[2]);
+                /**
+                 * HOW TO CHECK IF THE TILE OK
+                 * System.out.println("row is: " + row + " and col is: " + col);
+                 System.out.println("pointy is: " + pointY + " and pointx is: " + pointX + " and maxdig is: " + maxDigitNum);
+                 System.out.println(String.valueOf(checkPointTiles(pointX,pointY,row,col,maxDigitNum)));
+                 System.out.println(String.valueOf(pointY >= row ? true : false));
+                 System.out.println(String.valueOf(pointY < 1  ? true : false));
+                 System.out.println(String.valueOf(pointX < maxDigitNum ? true : false));
+                 System.out.println(String.valueOf(pointX >= col ? true : false));*/
+                while (!legalToInsert(board,row,col,maxDigitNum,pointX,pointY,orientation,battleshipsArray[i][1])) {
+                    if (!checkOrientation(orientation)) {
+                        boolean s = checkOrientation(orientation);
+                        System.out.println("Illegal orientation, try again!  " + s);
+                        inputLocation = scanner.nextLine();
+                        String[] splitedInputOr = inputLocation.split(", ");
+                        pointY = Integer.parseInt(splitedInputOr[0]) + 1;
+                        pointX = Integer.parseInt(splitedInputOr[1]) + maxDigitNum;
+                        orientation = Integer.parseInt(splitedInputOr[2]);
+                        continue;
+                    }
+                    if (!checkPointTiles(pointX, pointY, row, col, maxDigitNum)) {
+                        System.out.println("Illegal tile, try again!");
+                        inputLocation = scanner.nextLine();
+                        String[] splitedInputOr = inputLocation.split(", ");
+                        pointY = Integer.parseInt(splitedInputOr[0]) + 1;
+                        pointX = Integer.parseInt(splitedInputOr[1]) + maxDigitNum;
+                        orientation = Integer.parseInt(splitedInputOr[2]);
+                        continue;
+                    }
+                    if(!checkBattleshipBound(pointX,pointY,orientation,row,col,maxDigitNum,battleshipsArray[i][1])){
+                        System.out.println(String.valueOf(checkBattleshipBound(pointX,pointY,orientation,row,col,maxDigitNum,battleshipsArray[i][1])));
+                        System.out.println("Battleship exceeds the boundaries of the board, try again!  ");
+                        inputLocation = scanner.nextLine();
+                        String [] splitedInputBound = inputLocation.split(", ");
+                        pointY =Integer.parseInt(splitedInputBound[0]) + 1;
+                        pointX =Integer.parseInt(splitedInputBound[1]) + maxDigitNum;
+                        orientation = Integer.parseInt(splitedInputBound[2]);
+                        continue;
+                    }
+                    if(!checkOverLap(board,pointX,pointY,orientation,battleshipsArray[i][1],row,col,maxDigitNum)){
+                        System.out.println("Battleship overlaps another battleship, try again!");
+                        inputLocation = scanner.nextLine();
+                        String [] splitedInputOverlap = inputLocation.split(", ");
+                        pointY =Integer.parseInt(splitedInputOverlap[0]) + 1;
+                        pointX =Integer.parseInt(splitedInputOverlap[1]) + maxDigitNum;
+                        orientation = Integer.parseInt(splitedInputOverlap[2]);
+                        continue;
+                    }
+                    if (!checkAdjacent(board,row,col,maxDigitNum,pointX,pointY,orientation,battleshipsArray[i][1])){
+                        System.out.println("Adjacent battleship detected, try again!");
+                        inputLocation = scanner.nextLine();
+                        String [] splitedInputOverlap = inputLocation.split(", ");
+                        pointY =Integer.parseInt(splitedInputOverlap[0]) + 1;
+                        pointX =Integer.parseInt(splitedInputOverlap[1]) + maxDigitNum;
+                        orientation = Integer.parseInt(splitedInputOverlap[2]);
+                        continue;
+                    }
+                }
+                insert(board,pointX,pointY,battleshipsArray[i][1],orientation,"#");
+                print2dBoard(board,maxDigitNum);
+            }
+        }
+    }
+
+    /**
+     * this function check if the orientation user input is 1 or 0
+     * @param orientation
+     * @return
+     */
+    public static boolean checkOrientation(int orientation){
+        if(orientation == 1 || orientation == 0 ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * this function check if the current x,y is in the board
+     * @param pointX
+     * @param pointY
+     * @param row
+     * @param col
+     * @param maxDigitNum
+     * @return
+     */
+    public static boolean checkPointTiles(int pointX,int pointY, int row , int col, int maxDigitNum){
+        if(pointY >= row  || pointY < 1  || pointX < maxDigitNum || pointX >= col){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    /**
+     * this function check if the size of the battleship dont exceed the bounds of the board
+     * @param pointX
+     * @param pointY
+     * @param orientation
+     * @param row
+     * @param col
+     * @param maxDigitNum
+     * @param sizeBattleship
+     * @return
+     */
+    public static boolean checkBattleshipBound(int pointX,int pointY,int orientation,int row,int col,int maxDigitNum,int sizeBattleship){
+        if(orientation == 0){
+            for (int i = 0; i < sizeBattleship;i++){
+                if(checkPointTiles(pointX + i,pointY,row,col,maxDigitNum) == false){
+                    return false;
+                }
+            }
+        }
+        if(orientation == 1){
+            for (int i = 0; i < sizeBattleship ;i++){
+                if(checkPointTiles(pointX,pointY + i,row,col,maxDigitNum) == false){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * this function check if the current battleship not sitting on the same olace with another battleship
+     * @param board
+     * @param pointX
+     * @param pointY
+     * @param orientation
+     * @param sizeBattleship
+     * @return
+     */
+    public static boolean checkOverLap(String[][] board,int pointX,int pointY, int orientation, int sizeBattleship,int row,int col,int maxDigist){
+        if(orientation == 0){
+            for (int i = 0; i < sizeBattleship;i++){
+                if(!checkPointTiles(pointX + i,pointY,row,col,maxDigist) || !board[pointY][pointX + i ].equals("-")){
+                    return false;
+                }
+            }
+        }
+        if(orientation == 1){
+            for (int i = 0; i < sizeBattleship ;i++){
+                if(!checkPointTiles(pointX,pointY + i,row,col,maxDigist) || !board[pointY + i][pointX ].equals("-")){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * this function checks if the current battleship adjacent to another one
+     * @param board
+     * @param row
+     * @param col
+     * @param maxDigit
+     * @param pointX
+     * @param pointY
+     * @param orientation
+     * @param sizeOfBattleship
+     * @return
+     */
+    public  static boolean checkAdjacent(String[][] board,int row,int col,int maxDigit,int pointX,int pointY,int orientation,int sizeOfBattleship){
+        if (orientation == 0){
+            for (int i = -1 ;i < 2; i+=2){
+                if(checkPointTiles(pointX ,pointY + i, row, col, maxDigit)){
+                    if (!checkOverLap(board,pointX,pointY + i,orientation,sizeOfBattleship,row,col,maxDigit))    return false;
+                }
+            }
+            for (int i = -1; i <= sizeOfBattleship; i+=sizeOfBattleship+1){
+                if(checkPointTiles(pointX+i,pointY,row,col,maxDigit)){
+                    if(!board[pointY][pointX + i].equals("-"))    return false;
+                    if (checkPointTiles(pointX + i,pointY-1,row,col,maxDigit)){
+                        if(!board[pointY - 1][pointX + i].equals("-"))    return false;
+                    }
+                    if (checkPointTiles(pointX + i,pointY+1,row,col,maxDigit)){
+                        if(!board[pointY + 1][pointX + i].equals("-"))    return false;
+                    }
+                }
+            }
+            return true;
+        }else{
+            for (int  i = -1 ; i < 2; i += 2){
+                if (checkPointTiles(pointX + i, pointY, row, col, maxDigit)){
+                    if(!checkOverLap(board,pointX + i,pointY,orientation,sizeOfBattleship,row,col,maxDigit)) return false;
+                }
+            }
+            for (int i = -1; i <= sizeOfBattleship; i += sizeOfBattleship+1){
+                if (checkPointTiles(pointX, pointY + i,row,col,maxDigit)){
+                    if (!board[pointY + i][pointX].equals("-"))   return false;
+                    if(checkPointTiles(pointX - 1, pointY + i,row,col,maxDigit)){
+                        if (!board[pointY + i][pointX - 1].equals("-"))    return false;
+                    }
+                    if(checkPointTiles(pointX + 1, pointY + i,row,col,maxDigit)){
+                        if (!board[pointY +i][pointX + 1].equals("-"))    return false;
+                    }
+                }
+            }
+            return true;
+        }
+    }
+
+    /**
+     * this function make the condition of inserting battleship be more simple and proffesional
+     * @param board
+     * @param row
+     * @param col
+     * @param maxDigit
+     * @param pointX
+     * @param pointY
+     * @param orientation
+     * @param sizeOfBattleship
+     * @return
+     */
+    public static boolean legalToInsert(String[][] board,int row,int col,int maxDigit,int pointX,int pointY,int orientation,int sizeOfBattleship){
+        int counter = 0;
+        if (checkOrientation(orientation)) counter++;
+        //System.out.println(counter);
+        if (checkPointTiles(pointX,pointY,row,col,maxDigit)) counter++;
+        //System.out.println(counter);
+        if (checkBattleshipBound(pointX,pointY,orientation,row,col,maxDigit,sizeOfBattleship))  counter++;
+        //System.out.println(counter);
+        if (checkOverLap(board,pointX,pointY,orientation,sizeOfBattleship,row,col,maxDigit)) counter++;
+        //System.out.println(counter);
+        if (checkAdjacent(board,row,col,maxDigit,pointX,pointY,orientation,sizeOfBattleship))   counter++;
+        //boolean z = checkAdjacent(board,row,col,maxDigit,pointX,pointY,orientation,sizeOfBattleship);
+        //System.out.println(counter + "    " + String.valueOf(z));
+        if (counter < 5)    return false;
+        return true;
+    }
+
+    /**
+     * this function insert some string to 2D array
+     * @param board
+     * @param pointX
+     * @param pointY
+     * @param size
+     * @param orientation
+     * @param str
+     */
+    public static void insert(String[][] board , int pointX , int pointY , int size, int orientation, String str){
+        if(orientation == 0){
+            for (int i = 0; i < size; i++){
+                board[pointY][pointX + i] = str;
+            }
+        }
+        if(orientation == 1){
+            for (int i = 0; i < size; i++){
+                board[pointY + i][pointX] = str;
+            }
+        }
+    }
+
     /**
      * this function receives the board, battleship placement and orientation
      * and if the placement is legal it replaces the relevant tiles with "#"
@@ -175,7 +443,8 @@ public class HW_0_practice{
      * @param pointX
      * @param pointY
      */
-    public static void placeBattleShip(String [][]userBoard, int battleShipSize,
+
+    /*public static void placeBattleShip(String [][]userBoard, int battleShipSize,
                                        int orientation, int pointX, int pointY)
     {
         if (legalPlacement(userBoard,battleShipSize,orientation, pointX, pointY,sizeOfBoard))
@@ -250,6 +519,7 @@ public class HW_0_practice{
         }
         return true;
     }
+
 
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
