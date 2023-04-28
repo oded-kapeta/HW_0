@@ -201,8 +201,7 @@ public class HW_0_practice{
                 int orientation = Integer.parseInt(splitedInput[2]);
                 while (!legalToInsert(board,row,col,maxDigitNum,pointX,pointY,orientation,battleshipsArray[i][1])) {
                     if (!checkOrientation(orientation)) {
-                        boolean s = checkOrientation(orientation);
-                        System.out.println("Illegal orientation, try again!  " + s);
+                        System.out.println("Illegal orientation, try again!");
                         inputLocation = scanner.nextLine();
                         String[] splitedInputOr = inputLocation.split(", ");
                         pointY = Integer.parseInt(splitedInputOr[0]) + 1;
@@ -485,20 +484,25 @@ public class HW_0_practice{
      * @return
      */
     public static boolean checkBattleshipDrown(String[][] board, int pointX , int pointY,int row,int col, int maxDigit){
-        int counter = 0;
-        if(checkPointTiles(pointX + 1,pointY,row,col,maxDigit)){
-            if (board[pointY][pointX + 1].equals("#")) return false;
+        int counter = 0 , i = 1;
+        while (checkPointTiles(pointX + 1,pointY,row,col,maxDigit) && !board[pointY][pointX + 1].equals("–")){
+            if (board[pointY][pointX + 1].equals("#"))  return false;
+            pointX += 1;
         }
-        if(checkPointTiles(pointX - 1,pointY,row,col,maxDigit)){
-            if (board[pointY][pointX - 1].equals("#")) return false;
+        while (checkPointTiles(pointX - 1,pointY,row,col,maxDigit) && !board[pointY][pointX - 1].equals("–")){
+            if (board[pointY][pointX - 1].equals("#"))  return false;
+            pointX -= 1;
         }
-        if(checkPointTiles(pointX,pointY + 1,row,col,maxDigit)){
-            if (board[pointY + 1][pointX].equals("#")) return false;
+        while (checkPointTiles(pointX,pointY + 1,row,col,maxDigit) && !board[pointY + 1][pointX].equals("–")){
+            if (board[pointY + 1][pointX].equals("#"))  return false;
+            pointY += 1;
         }
-        if(checkPointTiles(pointX,pointY - 1,row,col,maxDigit)){
-            if (board[pointY - 1][pointX].equals("#")) return false;
+        while (checkPointTiles(pointX,pointY - 1,row,col,maxDigit) && !board[pointY - 1][pointX].equals("–")){
+            if (board[pointY - 1][pointX].equals("#"))  return false;
+            pointY -= 1;
         }
         return true;
+
     }
 
     /**
