@@ -1,8 +1,11 @@
 package PACKAGE_NAME;
 
-import java.util.Scanner;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
-public class HW_0_practice{
+import java.util.Scanner;
+
+public class HW_0_practice {
     public static Scanner scanner;
     public static Random rnd;
 
@@ -47,13 +50,15 @@ public class HW_0_practice{
         insertComputerBattleships(computerBoard,battleships_2dArray,maxDigitNumber);
 
 
-        //creating guessing board:
+        //creating guessing boards:
         String [][] userGuessingBoard = new String[row][col];
         createBoard(userGuessingBoard,maxDigitNumber);
+        String [][] computerGuessingBoard = new String[row][col];
+        createBoard(computerGuessingBoard,maxDigitNumber);
 
 
         //user and computer attacking:
-        gameAttack(userboard,computerBoard,userGuessingBoard,maxDigitNumber,amountOfBattleships,amountOfBattleships);
+        gameAttack(userboard,computerBoard,userGuessingBoard,computerGuessingBoard,maxDigitNumber,amountOfBattleships,amountOfBattleships);
     }
 
     /**
@@ -447,17 +452,21 @@ public class HW_0_practice{
         int col = board[0].length;
         for (int i = 0; i < battleshipsArray.length; i++) {
             for (int j = 0; j < battleshipsArray[i][0]; j++) {
-                int pointX = rnd.nextInt(col - maxDigitNum) + maxDigitNum;
                 int pointY = rnd.nextInt(row - 1) + 1;
+                int pointX = rnd.nextInt(col - maxDigitNum) + maxDigitNum;
                 int orientation = rnd.nextInt(2);
+                //System.out.println("pointY is : " + pointY + " point x is : " + pointX + " orientation is " + orientation);
                 while (!legalToInsert(board,row,col,maxDigitNum,pointX,pointY,orientation,battleshipsArray[i][1])){
-                    pointX = rnd.nextInt(col - maxDigitNum) + maxDigitNum;
                     pointY = rnd.nextInt(row - 1) + 1;
+                    pointX = rnd.nextInt(col - maxDigitNum) + maxDigitNum;
                     orientation = rnd.nextInt(2);
+                    //System.out.println("pointY is : " + pointY + " point x is : " + pointX + " orientation is " + orientation);
                 }
                 insert(board,pointX,pointY,battleshipsArray[i][1],orientation,"#");
             }
         }
+        //System.out.println("computer board is " );
+        //print2dBoard(board,maxDigitNum);
     }
 
     /**
@@ -562,19 +571,22 @@ public class HW_0_practice{
      * @param maxDigitNum
      * @param amountOfBattleship
      */
-    public static boolean computerAttack(String[][] userBoard, int maxDigitNum, int amountOfBattleship){
+    public static boolean computerAttack(String[][] userBoard, String [][] computerGuessingBoard,int maxDigitNum, int amountOfBattleship){
         int row = userBoard.length;
         int col = userBoard[0].length;
-        int pointX = rnd.nextInt(col - maxDigitNum) + maxDigitNum;
         int pointY = rnd.nextInt(row - 1) + 1;
-        while (!checkPointTiles(pointX,pointY,row,col,maxDigitNum)){
-            pointX = rnd.nextInt(col - maxDigitNum) + maxDigitNum;
+        int pointX = rnd.nextInt(col - maxDigitNum) + maxDigitNum;
+        //System.out.println("The computer attacked (" + (pointY-1) + ", " + (pointX-maxDigitNum) + ")");
+        while (!checkPointTiles(pointX,pointY,row,col,maxDigitNum) || !computerGuessingBoard[pointY][pointX].equals("–")){
             pointY = rnd.nextInt(row - 1) + 1;
+            pointX = rnd.nextInt(col - maxDigitNum) + maxDigitNum;
+            //System.out.println("The computer attacked (" + (pointY-1) + ", " + (pointX-maxDigitNum) + ")");
         }
         System.out.println("The computer attacked (" + (pointY-1) + ", " + (pointX-maxDigitNum) + ")");
         if(userBoard[pointY][pointX].equals("#")){
             System.out.println("That is a hit!");
             userBoard[pointY][pointX] = "X";
+            computerGuessingBoard[pointY][pointX] = "V";
             if (checkBattleshipDrown(userBoard,pointX,pointY,row,col,maxDigitNum)){
                 amountOfBattleship -= 1;
                 System.out.println("Your battleship has been drowned, you have left " + amountOfBattleship + " more battleships!");
@@ -588,6 +600,7 @@ public class HW_0_practice{
             }
         }else{
             System.out.println("That is a miss!");
+            computerGuessingBoard[pointY][pointX] = "X";
             System.out.print("Your current game board:");
             print2dBoard(userBoard,maxDigitNum);
             return false;
@@ -619,20 +632,21 @@ public class HW_0_practice{
      * @param userBattleships
      * @param compuetrBattleships
      */
-    public static void gameAttack(String[][] userBoard, String[][] computerBoard,String[][] userGuessingBoard,int maxDig,int userBattleships,int compuetrBattleships){
+    public static void gameAttack(String[][] userBoard, String[][] computerBoard,String[][] userGuessingBoard,String[][] computerGuessingBoard,int maxDig,int userBattleships,int compuetrBattleships){
         while (true){
             if (userAttack(computerBoard,userGuessingBoard,maxDig,userBattleships)) userBattleships--;
             if(checkGameOver(computerBoard,maxDig)){
                 System.out.println("You won the game!");
                 break;
             }
-            if (computerAttack(userBoard,maxDig,compuetrBattleships))   compuetrBattleships--;
+            if (computerAttack(userBoard,computerGuessingBoard,maxDig,compuetrBattleships))   compuetrBattleships--;
             if (checkGameOver(userBoard,maxDig)){
                 System.out.println("You lost ):");
                 break;
             }
         }
     }
+
 
 
     public static void main(String[] args) {
