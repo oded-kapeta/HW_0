@@ -63,8 +63,8 @@ public class Main {
 
     /**
      * this function get input from the user of the board
-     * @param boardSize
-     * @return
+     * @param boardSize variable that get input from the user
+     * @return  return to the variable board size the size of the board
      */
     public static String getBoardSize(String boardSize) {
         System.out.println("Enter the board size");
@@ -74,8 +74,8 @@ public class Main {
 
     /**
      * this function split the input of the board per X
-     * @param arr
-     * @param boardSize
+     * @param arr the array that being created from the split method
+     * @param boardSize the string that contain the board size
      */
     public static void splitBoard(int[]arr, String boardSize){
         String[] temp = boardSize.split("X");
@@ -85,7 +85,7 @@ public class Main {
 
     /**
      * gets the sizes and amount of the ships
-     * @param battleships
+     * @param battleships strint that contain the amount and sizes of the ship.
      * @return
      */
     public static String getBattleships(String battleships) {
@@ -96,8 +96,8 @@ public class Main {
 
     /**
      * splits the sizes and amounts of the ships into an array
-     * @param arr
-     * @param arr2
+     * @param arr is 2D array that contain in every row a mini array in length 2 that inside hi, is amount and size of ship
+     * @param arr2  the array that we get from use split ,method per " "
      */
     public static void splitBattleships(int arr[][],String arr2[]){
         for (int i = 0 ; i < arr2.length; i++){
@@ -110,9 +110,9 @@ public class Main {
     }
 
     /**
-     * this function return the amount of digits in numbet
-     * @param x
-     * @return
+     * this function return the amount of digits in number
+     * @param x is the number
+     * @return the amount of digits in the number
      */
     public static int getLength(int x){
         if(x == 0)   return 1;
@@ -125,22 +125,8 @@ public class Main {
     }
 
     /**
-     * prints int array
-     * @param arr
-     */
-    public static void print2dIntArray(int arr[][]){
-        for (int i = 0 ; i < arr.length;i++){
-            System.out.println();
-            for (int j = 0 ;j < arr[0].length;j++){
-                System.out.print(arr[i][j] + " ");
-            }
-        }
-        System.out.println();
-    }
-
-    /**
-     * prints string array:
-     * @param arr
+     * prints string array
+     * @param arr is the array we want to print
      */
     public static void print2dBoard(String arr[][], int maxDigits){
         for (int i = 0 ; i < arr.length;i++){
@@ -163,8 +149,8 @@ public class Main {
      * then we fill the rows numbers every time the kast digit until we didnt have any digits to fill
      * then we check with 'if' statement to check if we still have any 'null' places in our column
      * and in the end we fill all the "real game board" with '- '
-     * @param arr
-     * @param maxDigit
+     * @param arr is the array that we want to fill inside him our board
+     * @param maxDigit  the amount of digit we have in our last row number
      */
     public static void createBoard(String[][] arr , int maxDigit){
         for (int i = 0; i < maxDigit; i++)     arr[0][i] = " ";
@@ -191,6 +177,13 @@ public class Main {
             }
         }
     }
+
+    /**
+     * this function unsert battleships to the user board
+     * @param board is thr user board
+     * @param battleshipsArray is the sizes of te ships and the amount from every size
+     * @param maxDigitNum the amount of digit we have in our last row number
+     */
 
     public static void insertUserBattleships(String[][] board , int[][] battleshipsArray , int maxDigitNum){
         String inputLocation = new String();
@@ -260,8 +253,8 @@ public class Main {
 
     /**
      * this function check if the orientation user input is 1 or 0
-     * @param orientation
-     * @return
+     * @param orientation is the orientation that we get from the user
+     * @return true if orientation is valid and false either
      */
     public static boolean checkOrientation(int orientation){
         if(orientation == 1 || orientation == 0 ){
@@ -273,12 +266,12 @@ public class Main {
 
     /**
      * this function check if the current x,y is in the board
-     * @param pointX
-     * @param pointY
-     * @param row
-     * @param col
-     * @param maxDigitNum
-     * @return
+     * @param pointX    the column
+     * @param pointY    the row
+     * @param row       amount of rows that we have in our 2d array
+     * @param col       amount of columns that we have in our 2d array
+     * @param maxDigitNum   the amount of digit we have in our last row number
+     * @return  return true if the point id in the board an false either
      */
     public static boolean checkPointTiles(int pointX,int pointY, int row , int col, int maxDigitNum){
         if(pointY >= row  || pointY < 1  || pointX < maxDigitNum || pointX >= col){
@@ -290,13 +283,13 @@ public class Main {
 
     /**
      * this function check if the size of the battleship dont exceed the bounds of the board
-     * @param pointX
-     * @param pointY
-     * @param orientation
-     * @param row
-     * @param col
-     * @param maxDigitNum
-     * @param sizeBattleship
+     * @param pointX    the column
+     * @param pointY    the row
+     * @param orientation   the orientation
+     * @param row   amount of rows that we have in our 2d array
+     * @param col      amount of columns that we have in our 2d array
+     * @param maxDigitNum   the amount of digit we have in our last row number
+     * @param sizeBattleship the size of the battleship
      * @return
      */
     public static boolean checkBattleshipBound(int pointX,int pointY,int orientation,int row,int col,int maxDigitNum,int sizeBattleship){
@@ -319,11 +312,11 @@ public class Main {
 
     /**
      * this function check if the current battleship not sitting on the same olace with another battleship
-     * @param board
-     * @param pointX
-     * @param pointY
-     * @param orientation
-     * @param sizeBattleship
+     * @param board the board we checking
+     * @param pointX    the column
+     * @param pointY    the row
+     * @param orientation   the orientation
+     * @param sizeBattleship    the size of the battleship
      * @return
      */
     public static boolean checkOverLap(String[][] board,int pointX,int pointY, int orientation, int sizeBattleship,int row,int col,int maxDigist){
@@ -346,14 +339,14 @@ public class Main {
 
     /**
      * this function checks if the current battleship adjacent to another one
-     * @param board
-     * @param row
-     * @param col
-     * @param maxDigit
-     * @param pointX
-     * @param pointY
-     * @param orientation
-     * @param sizeOfBattleship
+     * @param board the board we checking.
+     * @param row   amount of rows that we have in our 2d array
+     * @param col   amount of columns that we have in our 2d array
+     * @param maxDigit  the amount of digit we have in our last row number
+     * @param pointX    the column
+     * @param pointY    the row
+     * @param orientation   the orientation
+     * @param sizeOfBattleship  the size of the battleship
      * @return
      */
     public  static boolean checkAdjacent(String[][] board,int row,int col,int maxDigit,int pointX,int pointY,int orientation,int sizeOfBattleship){
@@ -398,14 +391,15 @@ public class Main {
 
     /**
      * this function make the condition of inserting battleship be more simple and proffesional
-     * @param board
-     * @param row
-     * @param col
-     * @param maxDigit
-     * @param pointX
-     * @param pointY
-     * @param orientation
-     * @param sizeOfBattleship
+     * this function checks if the current battleship adjacent to another one
+     * @param board the board we checking.
+     * @param row   amount of rows that we have in our 2d array
+     * @param col   amount of columns that we have in our 2d array
+     * @param maxDigit  the amount of digit we have in our last row number
+     * @param pointX    the column
+     * @param pointY    the row
+     * @param orientation   the orientation
+     * @param sizeOfBattleship  the size of the battleship
      * @return
      */
     public static boolean legalToInsert(String[][] board,int row,int col,int maxDigit,int pointX,int pointY,int orientation,int sizeOfBattleship){
@@ -422,11 +416,11 @@ public class Main {
     /**
      * this function insert some string to 2D array
      * @param board
-     * @param pointX
-     * @param pointY
-     * @param size
-     * @param orientation
-     * @param str
+     * @param pointX    the column
+     * @param pointY    the row
+     * @param size  the size of the battleship
+     * @param orientation   the orientation
+     * @param str   what we wnt to insert to the board
      */
     public static void insert(String[][] board , int pointX , int pointY , int size, int orientation, String str){
         if(orientation == 0){
@@ -443,9 +437,9 @@ public class Main {
 
     /**
      * this function insert the battleships to the computer game board
-     * @param board
-     * @param battleshipsArray
-     * @param maxDigitNum
+     * @param board the computer board
+     * @param battleshipsArray  the array that contain the amount of each battleshipsize
+     * @param maxDigitNum   the amount of digit we have in our last row number
      */
     public static void insertComputerBattleships(String[][] board , int[][] battleshipsArray , int maxDigitNum){
         int row = board.length;
@@ -455,24 +449,20 @@ public class Main {
                 int pointY = rnd.nextInt(row - 1) + 1;
                 int pointX = rnd.nextInt(col - maxDigitNum) + maxDigitNum;
                 int orientation = rnd.nextInt(2);
-                //System.out.println("pointY is : " + pointY + " point x is : " + pointX + " orientation is " + orientation);
                 while (!legalToInsert(board,row,col,maxDigitNum,pointX,pointY,orientation,battleshipsArray[i][1])){
                     pointY = rnd.nextInt(row - 1) + 1;
                     pointX = rnd.nextInt(col - maxDigitNum) + maxDigitNum;
                     orientation = rnd.nextInt(2);
-                    //System.out.println("pointY is : " + pointY + " point x is : " + pointX + " orientation is " + orientation);
                 }
                 insert(board,pointX,pointY,battleshipsArray[i][1],orientation,"#");
             }
         }
-        //System.out.println("computer board is " );
-        //print2dBoard(board,maxDigitNum);
     }
 
     /**
      * this function return the amount of battleships we have
-     * @param battleships2D
-     * @return
+     * @param battleships2D the array that contain the amount of each battleshipsize
+     * @return the a,ount of battleships we have in total
      */
     public static int amountOfBattleships(int [][] battleships2D){
         int counter = 0;
@@ -485,12 +475,12 @@ public class Main {
     /**
      * this function check if we drown a battleship
      * @param board
-     * @param pointX
-     * @param pointY
-     * @param row
-     * @param col
-     * @param maxDigit
-     * @return
+     * @param pointX    the column
+     * @param pointY    the row
+     * @param row   amount of rows that we have in our 2d array
+     * @param col   amount of columns that we have in our 2d array
+     * @param maxDigit  the amount of digit we have in our last row number
+     * @return true if we drown a battleship
      */
     public static boolean checkBattleshipDrown(String[][] board, int pointX , int pointY,int row,int col, int maxDigit){
         int counter = 0 , i = 1;
@@ -520,6 +510,7 @@ public class Main {
      * @param userGuessingBoard
      * @param maxDigit
      * @param amountBattleships
+     * @return true if we drown 1 battleship
      */
     public static boolean userAttack( String[][] computerBoard , String[][] userGuessingBoard, int maxDigit, int amountBattleships){
         String whereToAttack = new String();
@@ -576,11 +567,9 @@ public class Main {
         int col = userBoard[0].length;
         int pointY = rnd.nextInt(row - 1) + 1;
         int pointX = rnd.nextInt(col - maxDigitNum) + maxDigitNum;
-        //System.out.println("The computer attacked (" + (pointY-1) + ", " + (pointX-maxDigitNum) + ")");
         while (!checkPointTiles(pointX,pointY,row,col,maxDigitNum) || !computerGuessingBoard[pointY][pointX].equals("–")){
             pointY = rnd.nextInt(row - 1) + 1;
             pointX = rnd.nextInt(col - maxDigitNum) + maxDigitNum;
-            //System.out.println("The computer attacked (" + (pointY-1) + ", " + (pointX-maxDigitNum) + ")");
         }
         System.out.println("The computer attacked (" + (pointY-1) + ", " + (pointX-maxDigitNum) + ")");
         if(userBoard[pointY][pointX].equals("#")){
